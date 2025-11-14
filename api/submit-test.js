@@ -1,5 +1,3 @@
-const fetch = require('node-fetch');
-
 module.exports = async (req, res) => {
   // Add CORS headers
   res.setHeader('Access-Control-Allow-Credentials', true);
@@ -18,7 +16,7 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const body = JSON.parse(req.body);
+    const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
     const { testName, studentName, timeSpent, score, totalQuestions, percentage, timestamp } = body;
 
     // Validate required fields
@@ -26,7 +24,7 @@ module.exports = async (req, res) => {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    // Get environment variables - use the actual values, not secret references
+    // Get environment variables
     const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
     const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
@@ -98,4 +96,4 @@ ${percentage >= 80 ? '🎉 Excellent work!' : percentage >= 60 ? '👍 Good job!
       details: error.message 
     });
   }
-}
+};
