@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wish Test</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #4f46e5;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .test-section {
+            display: none;
+        }
+
+        .timer {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 30px;
+            border: 2px solid #e5e7eb;
+        }
+
+        .timer span {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #4f46e5;
+        }
+
+        .question {
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4f46e5;
+        }
+
+        .question-number {
+            font-weight: 600;
+            color: #4f46e5;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .question-text {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option:hover {
+            border-color: #4f46e5;
+            background: #f0f4ff;
+        }
+
+        .option.selected {
+            border-color: #4f46e5;
+            background: #f0f4ff;
+        }
+
+        .option.correct {
+            border-color: #10b981;
+            background: #ecfdf5;
+        }
+
+        .option.incorrect {
+            border-color: #ef4444;
+            background: #fef2f2;
+        }
+
+        .results-section {
+            display: none;
+            text-align: center;
+        }
+
+        .score-card {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .score {
+            font-size: 4em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .score-text {
+            font-size: 1.3em;
+            opacity: 0.9;
+        }
+
+        .review-section {
+            text-align: left;
+        }
+
+        .review-question {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .student-info {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .notification {
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        .notification.success {
+            background: #ecfdf5;
+            border: 1px solid #10b981;
+            color: #065f46;
+        }
+
+        .notification.error {
+            background: #fef2f2;
+            border: 1px solid #ef4444;
+            color: #7f1d1d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Wish Test</h1>
+            <p>Past, Present, and Future Usage</p>
+        </div>
+
+        <div class="content">
+            <!-- Student Info Section -->
+            <div id="studentInfoSection" class="form-section">
+                <div class="form-group">
+                    <label for="studentName">Enter Your Name:</label>
+                    <input type="text" id="studentName" placeholder="Your full name">
+                </div>
+                <button class="btn" onclick="startTest()">Start Test</button>
+            </div>
+
+            <!-- Test Section -->
+            <div id="testSection" class="test-section">
+                <div class="timer">
+                    Time Spent: <span id="timer">00:00</span>
+                </div>
+                
+                <div id="questionsContainer">
+                    <!-- Questions will be dynamically inserted here -->
+                </div>
+                
+                <button class="btn" onclick="submitTest()" id="submitBtn" disabled>Submit Test</button>
+            </div>
+
+            <!-- Results Section -->
+            <div id="resultsSection" class="results-section">
+                <div class="student-info">
+                    <h3>Student: <span id="resultName"></span></h3>
+                    <p>Time Spent: <span id="resultTime"></span></p>
+                </div>
+                
+                <div class="score-card">
+                    <div class="score" id="finalScore">0/20</div>
+                    <div class="score-text" id="scoreText">Your Score</div>
+                </div>
+
+                <div id="telegramNotification" class="notification" style="display: none;"></div>
+
+                <div class="review-section">
+                    <h3>Review Your Answers</h3>
+                    <div id="reviewContainer">
+                        <!-- Review content will be dynamically inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test data
+        const testData = {
+            name: "Wish Test",
+            questions: [
+                {
+                    id: 1,
+                    text: "I don't have a car. I have to take the bus every day. I _____ I _____ a car.",
+                    options: [
+                        "A. wish / have",
+                        "B. wish / had",
+                        "C. wish / would have",
+                        "D. wish / had had"
+                    ],
+                    correct: 1,
+                    explanation: "We use 'wish + past simple' for present wishes about things we want to be different now."
+                },
+                {
+                    id: 2,
+                    text: "She is very shy. She hates speaking in public. She _____ she _____ more confident.",
+                    options: [
+                        "A. wishes / is",
+                        "B. wishes / were",
+                        "C. wishes / had been",
+                        "D. wishes / will be"
+                    ],
+                    correct: 1,
+                    explanation: "We use 'wish + were' for present wishes about different qualities (subjunctive mood)."
+                },
+                {
+                    id: 3,
+                    text: "It's raining, so we can't have the picnic. I _____ it _____ raining.",
+                    options: [
+                        "A. wish / isn't",
+                        "B. wish / wasn't",
+                        "C. wish / wouldn't be",
+                        "D. wish / hadn't been"
+                    ],
+                    correct: 1,
+                    explanation: "Present wish for a different current situation using 'wish + past simple'."
+                },
+                {
+                    id: 4,
+                    text: "I'm not good at cooking. I _____ I _____ how to cook well.",
+                    options: [
+                        "A. wish / know",
+                        "B. wish / knew",
+                        "C. wish / had known",
+                        "D. wish / would know"
+                    ],
+                    correct: 1,
+                    explanation: "Present wish for a different skill using 'wish + past simple'."
+                },
+                {
+                    id: 5,
+                    text: "I have to work tomorrow, so I can't go to the concert. I _____ I _____ to work tomorrow.",
+                    options: [
+                        "A. wish / don't have",
+                        "B. wish / didn't have",
+                        "C. wish / hadn't had",
+                        "D. wish / wouldn't have"
+                    ],
+                    correct: 1,
+                    explanation: "Present wish about a future obligation using 'wish + past simple'."
+                },
+                {
+                    id: 6,
+                    text: "I didn't study for the exam, and I failed. I _____ I _____ for the exam.",
+                    options: [
+                        "A. wish / study",
+                        "B. wish / studied",
+                        "C. wish / had studied",
+                        "D. wish / would study"
+                    ],
+                    correct: 2,
+                    explanation: "Past wish/regret using 'wish + past perfect' for something that didn't happen."
+                },
+                {
+                    id: 7,
+                    text: "He told her the secret, and now she is angry with him. He _____ her the secret.",
+                    options: [
+                        "A. wishes he didn't tell",
+                        "B. wishes he hadn't told",
+                        "C. wishes he doesn't tell",
+                        "D. wishes he wouldn't tell"
+                    ],
+                    correct: 1,
+                    explanation: "Past wish/regret using 'wish + past perfect' for something that happened."
+                },
+                {
+                    id: 8,
+                    text: "It's a pity we didn't see the Eiffel Tower when we were in Paris. We _____ the Eiffel Tower.",
+                    options: [
+                        "A. wish we saw",
+                        "B. wish we had seen",
+                        "C. wish we see",
+                        "D. wish we would see"
+                    ],
+                    correct: 1,
+                    explanation: "Past wish about a missed opportunity using 'wish + past perfect'."
+                },
+                {
+                    id: 9,
+                    text: "I was rude to him, and I feel bad about it now. I _____ rude to him.",
+                    options: [
+                        "A. wish I wasn't",
+                        "B. wish I hadn't been",
+                        "C. wish I wouldn't be",
+                        "D. wish I aren't"
+                    ],
+                    correct: 1,
+                    explanation: "Past wish/regret about a past action using 'wish + past perfect'."
+                },
+                {
+                    id: 10,
+                    text: "I missed the last train home last night. I _____ the last train.",
+                    options: [
+                        "A. wish I didn't miss",
+                        "B. wish I missed",
+                        "C. wish I hadn't missed",
+                        "D. wish I wouldn't miss"
+                    ],
+                    correct: 2,
+                    explanation: "Past wish about a specific event using 'wish + past perfect'."
+                },
+                {
+                    id: 11,
+                    text: "My brother is leaving tomorrow. I'll miss him. I _____ he _____ so soon.",
+                    options: [
+                        "A. wish / isn't leaving",
+                        "B. wish / doesn't leave",
+                        "C. wish / wouldn't leave",
+                        "D. wish / hadn't left"
+                    ],
+                    correct: 2,
+                    explanation: "Future wish for someone's action to be different using 'wish + would'."
+                },
+                {
+                    id: 12,
+                    text: "My neighbor plays loud music every night. I _____ my neighbor _____ playing loud music.",
+                    options: [
+                        "A. wish / stops",
+                        "B. wish / stopped",
+                        "C. wish / would stop",
+                        "D. wish / had stopped"
+                    ],
+                    correct: 2,
+                    explanation: "Wish for an annoying habit to stop using 'wish + would'."
+                },
+                {
+                    id: 13,
+                    text: "It looks like it's going to rain on our parade. I _____ it _____.",
+                    options: [
+                        "A. wish / doesn't rain",
+                        "B. wish / didn't rain",
+                        "C. wish / wouldn't rain",
+                        "D. wish / hadn't rained"
+                    ],
+                    correct: 2,
+                    explanation: "Wish for weather behavior to be different using 'wish + would'."
+                },
+                {
+                    id: 14,
+                    text: "My computer keeps crashing. It's so frustrating. I _____ my computer _____ crashing.",
+                    options: [
+                        "A. wish / doesn't keep",
+                        "B. wish / didn't keep",
+                        "C. wish / wouldn't keep",
+                        "D. wish / hadn't kept"
+                    ],
+                    correct: 2,
+                    explanation: "Wish for an annoying situation to stop using 'wish + would'."
+                },
+                {
+                    id: 15,
+                    text: "You won't tell me the truth, and I want to know. I _____ you _____ me the truth.",
+                    options: [
+                        "A. wish / tell",
+                        "B. wish / told",
+                        "C. wish / would tell",
+                        "D. wish / had told"
+                    ],
+                    correct: 2,
+                    explanation: "Wish for someone to do something using 'wish + would'."
+                },
+                {
+                    id: 16,
+                    text: "I have to work on weekends. It's unfair. I _____ on weekends.",
+                    options: [
+                        "A. wish I don't work",
+                        "B. wish I didn't work",
+                        "C. wish I hadn't worked",
+                        "D. wish I wouldn't work"
+                    ],
+                    correct: 1,
+                    explanation: "Present wish for a different situation using 'wish + past simple'."
+                },
+                {
+                    id: 17,
+                    text: "I didn't learn to play a musical instrument when I was a child. I _____ a musical instrument when I was a child.",
+                    options: [
+                        "A. wish I learn",
+                        "B. wish I learned",
+                        "C. wish I had learned",
+                        "D. wish I would learn"
+                    ],
+                    correct: 2,
+                    explanation: "Past wish about a missed opportunity using 'wish + past perfect'."
+                },
+                {
+                    id: 18,
+                    text: "You always interrupt me when I'm speaking! I _____ you _____ me when I'm speaking.",
+                    options: [
+                        "A. wish / don't interrupt",
+                        "B. wish / didn't interrupt",
+                        "C. wish / wouldn't interrupt",
+                        "D. wish / hadn't interrupted"
+                    ],
+                    correct: 2,
+                    explanation: "Wish about an annoying habit using 'wish + would'."
+                },
+                {
+                    id: 19,
+                    text: "I can't afford to go on vacation this year. I _____ I _____ to go on vacation.",
+                    options: [
+                        "A. wish / can afford",
+                        "B. wish / could afford",
+                        "C. wish / had afforded",
+                        "D. wish / would afford"
+                    ],
+                    correct: 1,
+                    explanation: "Present wish for ability using 'wish + could'."
+                },
+                {
+                    id: 20,
+                    text: "We got lost because we didn't bring a map. We _____ a map.",
+                    options: [
+                        "A. wish we bring",
+                        "B. wish we brought",
+                        "C. wish we had brought",
+                        "D. wish we would bring"
+                    ],
+                    correct: 2,
+                    explanation: "Past wish/regret using 'wish + past perfect'."
+                }
+            ]
+        };
+
+        let studentAnswers = [];
+        let startTime;
+        let timerInterval;
+
+        function startTest() {
+            const studentName = document.getElementById('studentName').value.trim();
+            if (!studentName) {
+                alert('Please enter your name');
+                return;
+            }
+
+            document.getElementById('studentInfoSection').style.display = 'none';
+            document.getElementById('testSection').style.display = 'block';
+
+            // Initialize student answers array
+            studentAnswers = new Array(testData.questions.length);
+
+            // Initialize questions
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+            
+            testData.questions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `
+                    <div class="question-number">Question ${index + 1}</div>
+                    <div class="question-text">${question.text}</div>
+                    <div class="options">
+                        ${question.options.map((option, optIndex) => `
+                            <div class="option" onclick="selectAnswer(${index}, ${optIndex})">
+                                ${option}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(questionDiv);
+            });
+
+            // Start timer
+            startTime = new Date();
+            timerInterval = setInterval(updateTimer, 1000);
+            updateTimer();
+        }
+
+        function updateTimer() {
+            if (!startTime) return;
+            
+            const now = new Date();
+            const diff = Math.floor((now - startTime) / 1000);
+            const minutes = Math.floor(diff / 60);
+            const seconds = diff % 60;
+            
+            document.getElementById('timer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function selectAnswer(questionIndex, optionIndex) {
+            // Remove selected class from all options in this question
+            const questionDiv = document.getElementById('questionsContainer').children[questionIndex];
+            const options = questionDiv.querySelectorAll('.option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            
+            // Add selected class to chosen option
+            options[optionIndex].classList.add('selected');
+            
+            // Store answer
+            studentAnswers[questionIndex] = optionIndex;
+
+            // Enable submit button if all questions are answered
+            const allAnswered = studentAnswers.filter(answer => answer !== undefined).length === testData.questions.length;
+            document.getElementById('submitBtn').disabled = !allAnswered;
+        }
+
+        async function submitTest() {
+            clearInterval(timerInterval);
+            
+            // Calculate score
+            let correctCount = 0;
+            testData.questions.forEach((question, index) => {
+                if (studentAnswers[index] === question.correct) {
+                    correctCount++;
+                }
+            });
+
+            // Calculate time spent
+            const endTime = new Date();
+            const timeSpent = Math.floor((endTime - startTime) / 1000);
+            const minutes = Math.floor(timeSpent / 60);
+            const seconds = timeSpent % 60;
+            const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            // Show results
+            showResults(correctCount, timeString);
+            
+            // Send to Telegram
+            await sendToTelegram(correctCount, timeString);
+        }
+
+        function showResults(score, timeString) {
+            document.getElementById('testSection').style.display = 'none';
+            document.getElementById('resultsSection').style.display = 'block';
+
+            const studentName = document.getElementById('studentName').value.trim();
+            document.getElementById('resultName').textContent = studentName;
+            document.getElementById('resultTime').textContent = timeString;
+            document.getElementById('finalScore').textContent = `${score}/20`;
+
+            // Set score text based on performance
+            const percentage = (score / 20) * 100;
+            let scoreText = '';
+            if (percentage >= 90) scoreText = '🎉 Excellent! Outstanding performance!';
+            else if (percentage >= 80) scoreText = '👍 Very Good! Well done!';
+            else if (percentage >= 70) scoreText = '🙂 Good job!';
+            else if (percentage >= 60) scoreText = '💪 Not bad! Keep practicing!';
+            else scoreText = '📚 Keep studying! You\'ll improve!';
+            
+            document.getElementById('scoreText').textContent = scoreText;
+
+            // Generate review
+            const reviewContainer = document.getElementById('reviewContainer');
+            reviewContainer.innerHTML = '';
+            
+            testData.questions.forEach((question, index) => {
+                const userAnswer = studentAnswers[index];
+                const isCorrect = userAnswer === question.correct;
+                
+                const reviewDiv = document.createElement('div');
+                reviewDiv.className = 'review-question';
+                reviewDiv.innerHTML = `
+                    <div class="question-number">Question ${index + 1} ${isCorrect ? '✅' : '❌'}</div>
+                    <div class="question-text">${question.text}</div>
+                    <div class="options">
+                        ${question.options.map((option, optIndex) => {
+                            let className = 'option';
+                            if (optIndex === question.correct) {
+                                className += ' correct';
+                            } else if (optIndex === userAnswer && !isCorrect) {
+                                className += ' incorrect';
+                            }
+                            
+                            return `<div class="${className}">${option}</div>`;
+                        }).join('')}
+                    </div>
+                    <div style="margin-top: 15px; padding: 10px; background: #f0f9ff; border-radius: 5px; border-left: 3px solid #0ea5e9;">
+                        <strong>Explanation:</strong> ${question.explanation}
+                    </div>
+                `;
+                reviewContainer.appendChild(reviewDiv);
+            });
+        }
+
+        async function sendToTelegram(score, timeString) {
+            const studentName = document.getElementById('studentName').value.trim();
+            const percentage = Math.round((score / 20) * 100);
+            
+            const report = {
+                testName: testData.name,
+                studentName: studentName,
+                timeSpent: timeString,
+                score: score,
+                totalQuestions: 20,
+                percentage: percentage,
+                timestamp: new Date().toISOString()
+            };
+
+            const notification = document.getElementById('telegramNotification');
+            
+            try {
+                // Send to our API endpoint
+                const response = await fetch('/api/submit-test', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(report)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    notification.style.display = 'block';
+                    notification.className = 'notification success';
+                    notification.innerHTML = '✅ Test results sent successfully!';
+                } else {
+                    throw new Error(result.error || 'Failed to send results');
+                }
+            } catch (error) {
+                console.error('Error sending to Telegram:', error);
+                notification.style.display = 'block';
+                notification.className = 'notification error';
+                notification.innerHTML = '⚠️ Test completed! (Telegram notification failed)';
+            }
+
+            // Hide notification after 5 seconds
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 5000);
+        }
+
+        // Allow Enter key to start test
+        document.getElementById('studentName').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                startTest();
+            }
+        });
+    </script>
+</body>
+</html>
